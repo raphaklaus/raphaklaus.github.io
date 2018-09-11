@@ -1,0 +1,15 @@
+---
+layout: page
+title: About me
+---
+
+Currently, I'm focused on building web/mobile applications with NodeJS, including techs like Google Firebase, Express, TypeScript, MongoDB and many more.
+
+As my latest experiences are in startups my main goal is to help the team I'm in deliver software in a fast-paced rhythm using Agile culture and choosing the right techs for each product.
+
+Public key:
+<a href="raphaklaus.asc" class="under-line">E197 3B41 AC97 7BDB 63CE 07C8 F0E3 58DF D695 D8E1</a>
+
+<a href="mailto:%72%61%70%68%61%6b%6c%61%75%73@%67%6d%61%69%6c.%63%6f%6d">You can reach me here</a> or <a href="https://www.linkedin.com/in/raphaelduartepinheiro/" target="_blank">here</a>.
+
+

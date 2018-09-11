@@ -1,0 +1,21 @@
+name: Raphael Klaus
+description: Creative through technology
+meta_description: "Creative through technology"
+
+markdown: kramdown
+highlighter: rouge
+logo: false
+paginate: 15
+baseurl: 
+domain_name: 'http://raphaklaus.com'
+google_analytics: 'UA-74900050-1'
+gems: [jekyll-paginate]
+
+# Details for the RSS feed generator
+url:            'raphaklaus.com'
+author:         'Raphael Klaus'
+miniabout: 'Follow me on <a href="https://github.com/raphaklaus" target="_blank">GitHub</a> or <a href="https://twitter.com/raphaklaus" target="_blank">Twitter</a>!'
+
+username: raphaklaus
+
+permalink: posts/:title:output_ext
