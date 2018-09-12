@@ -1635,7 +1635,7 @@ body:not(.post-template) .post-title {
         width: calc(100% + 32px); /* expand with to image + margins */
         margin: 0 -16px; /* get rid of margins */
         min-width: 0;
-        max-width: 112%; /* fallback when calc doesn't work */
+        max-width: 100%; /* fallback when calc doesn't work */
     }
 
     .post-meta {
