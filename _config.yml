@@ -18,4 +18,7 @@ miniabout: 'Follow me on <a href="https://github.com/raphaklaus" target="_blank"
 
 username: raphaklaus
 
-permalink: posts/:title:output_ext
+permalink: posts/:title
+
+disqus:
+    shortname: raphaklaus
