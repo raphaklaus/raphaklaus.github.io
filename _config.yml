@@ -9,7 +9,7 @@ paginate: 15
 baseurl: 
 domain_name: 'http://raphaklaus.com'
 google_analytics: 'UA-74900050-1'
-gems: [jekyll-paginate]
+plugins: [jekyll-paginate]
 
 # Details for the RSS feed generator
 url:            'raphaklaus.com'
