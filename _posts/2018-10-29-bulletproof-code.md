@@ -9,6 +9,8 @@ layout: post
 
 Nesse exato momento estou voando para Barcelona, e meio que fiquei com tédio e resolvi escrever sobre como minimizar erros em uma aplicação através de boas práticas de código e infraestrutura.
 
+<!--more-->
+
 ## Pensamento adversarial
 
 Essa é o melhor **linter** ou **test** que você pode criar. Seja crítico quanto à sua criação. Duvide que ela vá funcionar, pense como um usuário poderia estragar suas expectativas de sistema/requisitos ao colocar um valor string em um campo numérico. 
