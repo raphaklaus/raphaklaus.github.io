@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Talks
-cover: /assets/images/talk01.jpg
+image: /assets/images/talk01.jpg
 ---
 <br/>
 **Hacking the Nintendo Game Boy with JavaScript**  

@@ -3,7 +3,7 @@ title: "Callbacks From Hell"
 article: true
 date: 2016-08-21
 tags: callback, nodejs, promises, hell, javascript
-cover: /assets/images/cowboy.jpg
+image: /assets/images/cowboy.jpg
 layout: post
 ---
 

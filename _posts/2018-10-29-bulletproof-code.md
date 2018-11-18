@@ -3,13 +3,17 @@ title: "Bulletproof Code"
 article: true
 date: 2018-10-29 18:00:00
 tags: code, bulletproof, quality, lslint, eslint, testing
-cover: /assets/images/bullets.jpg
+image: /assets/images/bullets.jpg
 layout: post
 ---
 
-Nesse exato momento estou voando para Barcelona, e meio que fiquei com tédio e resolvi escrever sobre como minimizar erros em uma aplicação através de boas práticas de código e infraestrutura.
+Existe um conjunto de práticas que se combinadas pode fazer a experiência de programação mais prazerosa e diminuir os erros em produção. Outras práticas geralmente requerem refatorações, aplicação de Design Patterns, etc. Porém, as que irei mostrar agora são 100% não-blocantes.
 
 <!--more-->
+
+Ou seja, você conseguirá experimenta-las sem compromissos, ou seu dinheiro de volta!
+
+Nesse exato momento estou voando para Barcelona, e meio que fiquei com tédio e resolvi escrever sobre como minimizar erros em uma aplicação através de boas práticas de código e infraestrutura. Vamos lá!
 
 ## Pensamento adversarial
 

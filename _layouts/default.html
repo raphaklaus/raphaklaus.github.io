@@ -6,26 +6,7 @@
 
     <title>{{ site.name }} - {{ site.description }}</title>
 
-    <meta content="{{ site.title }}" property="og:site_name">
-    {% if page.title %}
-      <meta content="{{ page.title }}" property="og:title">
-    {% else %}
-      <meta content="{{ site.title }}" property="og:title">
-    {% endif %}
-    {% if page.title %}
-      <meta content="article" property="og:type">
-    {% else %}
-      <meta content="website" property="og:type">
-    {% endif %}
-
-    <meta property=”og:title” content="{{ page.title | default: site.name}}" />
-    <meta property=”og:description” content="{{ page.excerpt | remove: '<p>' | remove: '</p>'  | default: site.description }}" />
-
-    {% if page.cover == false %}
-      <meta property=”og:image” content="{{ site.url }}{{ '/assets/images/profile.png' }}" />
-    {% else %}
-      <meta property=”og:image” content="{{ site.url }}{{ page.cover }}" />
-    {% endif %}
+    {% seo %}
 
     <meta name="HandheldFriendly" content="True" />
     <meta name="MobileOptimized" content="320" />

@@ -3,7 +3,7 @@ title: "Como um Bot de Telegram salvou as Olimpíadas Rio 2016"
 article: true
 date: 2017-01-07
 tags: rio2016, rio, telegram, nodejs, javascript, bot, 2016, olimpiadas, olympics, sportv
-cover: /assets/images/sportv.jpg
+image: /assets/images/sportv.jpg
 layout: post
 ---
 

@@ -7,12 +7,12 @@ highlighter: rouge
 logo: false
 paginate: 15
 baseurl: 
-domain_name: 'http://raphaklaus.com'
+domain_name: 'https://raphaklaus.com'
 google_analytics: 'UA-74900050-1'
-plugins: [jekyll-paginate]
+plugins: [jekyll-paginate, jekyll-seo-tag]
 
 # Details for the RSS feed generator
-url:            'raphaklaus.com'
+url: https://raphaklaus.com
 author:         'Raphael Klaus'
 miniabout: 'Follow me on <a href="https://github.com/raphaklaus" target="_blank">GitHub</a> or <a href="https://twitter.com/raphaklaus" target="_blank">Twitter</a>!'
 
