@@ -1,0 +1,238 @@
+I"6^<p>Olá, pessoal! Nesse artigo vou falar sobre o famoso Callback Hell e como sair dele via Promises usando as melhores técnicas.</p>
+
+<!-- more -->
+
+<p><strong>Atualização (05/11/2016): A nova versão 7 do NodeJS já suporta async/await, porém apenas usando a flag <code class="language-plaintext highlighter-rouge">--harmony</code> ao rodar o programa</strong></p>
+
+<p><strong>Atualização (22/04/2017): A partir da versão 7.6 do NodeJS o async/await já funciona sem a flag harmony</strong></p>
+
+<h2 id="antes-uma-introdução-a-callbacks">Antes, uma introdução a callbacks</h2>
+
+<p>Em desenvolvimento de software chamamos de <em>callback</em> funções que são passadas como argumento para outras funções, geralmente para serem
+executadas depois de algum processamento. Esse <em>callback</em> pode ser executado de forma síncrona ou assíncrona.</p>
+
+<p><strong>Síncrono</strong></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">function</span> <span class="nx">calculaICMS</span><span class="p">(</span><span class="nx">valor</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">valor</span> <span class="o">*</span> <span class="mf">0.19</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">calculaValorFinal</span><span class="p">(</span><span class="nx">valor</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">valor</span> <span class="o">+</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">valor</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">sacoLaranja</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">total</span><span class="p">:</span> <span class="mi">25</span>
+  <span class="p">};</span>
+
+  <span class="nx">calculaValorFinal</span><span class="p">(</span><span class="nx">sacoLaranja</span><span class="p">.</span><span class="nx">total</span><span class="p">,</span> <span class="nx">calculaICMS</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Observe que tudo é feito “ao mesmo tempo”. Essa abordagem é interessante do ponto de vista de design, permitindo facilmente
+colocar outra função calculadora de impostos.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">function</span> <span class="nx">calculaIPI</span><span class="p">(</span><span class="nx">produto</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">produto</span><span class="p">.</span><span class="nx">industrializado</span> <span class="p">?</span> <span class="nx">produto</span><span class="p">.</span><span class="nx">total</span> <span class="o">*</span> <span class="mf">0.10</span>
+    	<span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">calculaValorFinal</span><span class="p">(</span><span class="nx">produto</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">produto</span><span class="p">.</span><span class="nx">total</span> <span class="o">+</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">produto</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">cadeiraExecutiva</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">total</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="na">industrializado</span><span class="p">:</span> <span class="kc">true</span>
+  <span class="p">};</span>
+
+  <span class="nx">calculaValorFinal</span><span class="p">(</span><span class="nx">cadeiraExecutiva</span><span class="p">,</span> <span class="nx">calculaIPI</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>É evidente que existem formas melhores de resolver esse tipo de problema. A grande questão neste cenário, é que a função
+<code class="language-plaintext highlighter-rouge">calculaValorFinal</code> não precisa conhecer qual função aplicadora de imposto será adicionada.</p>
+
+<p><strong>Assíncrono</strong></p>
+
+<p>Um callback do tipo assíncrono tem a ver com eventos que completam-se em um período de tempo <em>desconhecido</em>
+(leitura e escrita de arquivo, requisições de todos os tipos e processamento dinâmico). Por isso se passa um callback, que será uma função executada quando a tarefa for finalizada, com sucesso ou erro.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">getAccess</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">getUsers</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">createProduct</span><span class="p">({</span><span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Mesa</span><span class="dl">'</span><span class="p">},</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">deleteTemporaryUser</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Finalmente terminou!</span><span class="dl">'</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+</code></pre></div></div>
+
+<p>Esse tipo de abordagem é chamada de <em>Pyramid of Hell</em>, ou mais especificamente <em>Callback Hell</em>, que é o contínuo aninhamento de funções. Isso é considerado uma má prática que deixa o código com baixa manutenibilidade.</p>
+
+<h2 id="usando-promises">Usando Promises</h2>
+
+<p>Para melhorar essa abordagem usa-se <a href="https://promisesaplus.com/" target="_blank">Promises</a>, que nada mais é do que o retorno de um valor futuro.</p>
+
+<p>Em uma requisição HTTP por exemplo, não se sabe quando o retorno acontecerá. Então, para não bloquear o fluxo da aplicação, a Promise adia a execução da função <code class="language-plaintext highlighter-rouge">.then()</code> que é quando a Promise é <em>resolvida</em>.</p>
+
+<p>Criar uma Promise é muito facil, basta envolver o código que deseja adiar a execução com o bloco:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Use a função resolve() quando quiser dizer que a Promise foi resolvida, ou reject() quando quiser explicitar</span>
+  <span class="c1">// um erro no fluxo</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Um exemplo na prática:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">numeroPar</span><span class="p">(</span><span class="nx">numero</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span>  <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">numero</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="nx">resolve</span><span class="p">();</span>
+      <span class="k">else</span>
+        <span class="nx">reject</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Não é um número par</span><span class="dl">'</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Imagine que essa função <code class="language-plaintext highlighter-rouge">numeroPar</code> é chamada quando alguém realiza um <em>GET</em> num servidor hipotético (por isso uso timeOut para simular uma demora na resposta).</p>
+
+<p>Se o número passado por parametro for par, causará a Promise <em>resolução</em>, caso contrário, retornará um erro, que cairá no <code class="language-plaintext highlighter-rouge">catch</code>:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// localhost/numeroPar&amp;numero=2</span>
+<span class="kd">function</span> <span class="nx">getNumeroPar</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span> <span class="nx">req</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">numeroPar</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">numero</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">É par!</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">É ímpar!</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="nativo-vs-bibliotecas">Nativo vs Bibliotecas</h2>
+
+<p>Existem formas diferentes de se criar Promises. A Nativa do ES6 que mostrei acima e usando bibliotecas que estendem e melhoram funcionalidades. <strong>Recomendo</strong> o <a href="http://bluebirdjs.com/" target="_blank">Bluebird</a> com toda a força porque tem uma abordagem mais direta e é muito poderoso, além de ser usado pela maioria dos grandes e pequenos projetos.</p>
+
+<p>Existe também a <a href="https://github.com/kriskowal/q" target="_blank">q</a>.</p>
+
+<h2 id="filtered-catching">Filtered Catching</h2>
+
+<p>Há um recurso muito interessante que permite tratar os erros das promises da mesma forma que se trata exceções e de <em>forma controlada</em>! Essa funcionalidade pode ser usada com o bluebird.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// Suponha que temos uma função que tenta realizar um POST</span>
+  <span class="c1">// Dentro da função criaUsuario existe uma promise</span>
+  <span class="c1">// que rejeita com os erros devidos.</span>
+  <span class="nx">criaUsuario</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">usuario</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Usuário criado:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">usuario</span><span class="p">);</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">PermissionDeniedError</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Credenciais incorretas</span><span class="dl">'</span><span class="p">);</span>
+      <span class="c1">// Faz tratamento para permissão negada...</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">UserAlreadyExists</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+      <span class="c1">// Faz tratamento específico para usuário já existe...</span>
+    <span class="p">});</span>
+</code></pre></div></div>
+
+<p>E as classes de erro ficam mais ou menos assim:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">PermissionDeniedError</span> <span class="kd">extends</span> <span class="nb">Error</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">(</span><span class="dl">'</span><span class="s1">Credenciais incorretas</span><span class="dl">'</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">PermissionDeniedError</span><span class="dl">'</span><span class="p">;</span>
+  <span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">UserAlreadyExists</span> <span class="kd">extends</span> <span class="nb">Error</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">(</span><span class="dl">'</span><span class="s1">Usuário já existe</span><span class="dl">'</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">UserAlreadyExists</span><span class="dl">'</span><span class="p">;</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Eu criei um repositório teste para quem quiser ver na prática como funciona: <a href="https://github.com/raphaklaus/filtered-catching-promise" target="_blank">filtered-catching-promise</a></p>
+
+<h2 id="promisify">Promisify</h2>
+
+<p>É uma técnica incrível para transformar funções com assinatura de callback <code class="language-plaintext highlighter-rouge">function(error, data)</code> em promises.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="dl">'</span><span class="s1">example.json</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<p>Agora promisificado usando o bluebird:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">var</span> <span class="nx">readFile</span> <span class="o">=</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">promisify</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">fs</span><span class="dl">"</span><span class="p">).</span><span class="nx">readFile</span><span class="p">);</span>
+
+  <span class="nx">readFile</span><span class="p">(</span><span class="dl">'</span><span class="s1">example.json</span><span class="dl">'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+      <span class="c1">// E trata o erro...</span>
+    <span class="p">});</span>
+</code></pre></div></div>
+
+<h2 id="rodando-promises-em-série-e-obtendo-output-final">Rodando promises em série e obtendo output final</h2>
+
+<p>Há cenários que se precisa rodar x tarefas em série, ou seja, uma depois da outra (em ordem). Vou usar a notação de <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank">Arrow Functions</a> do ES6 que faz as coisas menos verbosas.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// Faça de conta que as funções abaixo existem.</span>
+  <span class="c1">// Elas são auto explicativas</span>
+  <span class="nx">uploadFile</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="nx">getUploadedInfo</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">info</span> <span class="o">=&gt;</span> <span class="nx">sendToAnalytics</span><span class="p">(</span><span class="nx">info</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p>E também cenários que é necessário rodar tudo em paralelo, mas fazer algo no final, vá com o <code class="language-plaintext highlighter-rouge">Promise.all(array)</code></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// Imagine que exista uma função promise que faz upload de</span>
+  <span class="c1">// arquivos chamada fazUpload()</span>
+
+  <span class="kd">var</span> <span class="nx">promiseArray</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">arquivo</span> <span class="k">of</span> <span class="nx">arquivos</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">promiseArray</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">fazUpload</span><span class="p">(</span><span class="nx">arquivo</span><span class="p">.</span><span class="nx">data</span><span class="p">));</span>
+  <span class="p">}</span>
+
+  <span class="nb">Promise</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">promiseArray</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Todos os arquivos foram enviados com sucesso!</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">})</span>
+</code></pre></div></div>
+
+<p>Simples, não? :)</p>
+
+<h2 id="performance">Performance</h2>
+
+<p>Promises se mal gerenciadas podem causar um gargalo absurdo na aplicação já que são mais custosas para processar do que callbacks puros. É bom ter cuidado com o número de promises pendentes no sistema.</p>
+
+<p>Uma forma facil de detectar esse tipo de problema em sua aplicação é observar o status de todas as promises, quais estão pendentes por mais tempo através da propriedade <code class="language-plaintext highlighter-rouge">isPending()</code> caso esteja usando o bluebird.</p>
+
+<h2 id="es7-asyncawait">ES7 async/await:</h2>
+
+<p>Pense nestas funcionalidades numa forma de escrever uma Promise da maneira mais inline possível. Isso faz parte do conjuntos de features das especificações do EcmaScript 7 e só está disponível usando <a href="https://babeljs.io/" target="_blank">Babel</a>. Vejam como fica uma requisição usando async/await</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// É necessário marcar que a função é do tipo async</span>
+  <span class="k">async</span> <span class="nx">getPosts</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">posts</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">request</span><span class="p">(</span><span class="dl">'</span><span class="s1">/posts</span><span class="dl">'</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Aqui estão os posts</span><span class="dl">'</span><span class="p">,</span> <span class="nx">posts</span><span class="p">);</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Explicando: Quando e onde essa função for invocada, no seu escopo interno ela ficará “bloqueada” por causa do await, esperando ele terminar para poder logar os posts. Já escopo externo, o fluxo não é interrompido e tudo continua correndo independente do que está acontecendo dentro da função async.</p>
+
+<p>Vou deixar um exemplo prático também: https://tonicdev.com/raphaklaus/async-await</p>
+
+<p>Vale lembrar que async/await <strong>não substitui</strong> as Promises, mas trabalham em conjunto =)</p>
+
+<p>Bom, é isso! Espero que tenham apreciado esse apanhado geral sobre callbacks e Promises. Qualquer dúvida ou adição basta deixar seu comentário!</p>
+:ET

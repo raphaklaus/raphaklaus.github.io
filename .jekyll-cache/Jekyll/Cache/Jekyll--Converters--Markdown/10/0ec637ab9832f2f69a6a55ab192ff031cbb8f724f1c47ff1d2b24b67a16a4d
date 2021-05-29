@@ -1,0 +1,31 @@
+I"U<p><br /></p>
+<h4 id="rom-text-tools"><a href="https://github.com/raphaklaus/gameboy-text-tools">ROM text tools</a></h4>
+<p>NodeJS utilities to help translating ROMs from 90’s consoles using Relative Search algorithm.</p>
+
+<h4 id="game-boy-rom-visualizer"><a href="https://github.com/raphaklaus/gameboy-rom-visualizer">Game Boy ROM Visualizer</a></h4>
+<p>Game Boy’s 2BPP graphic viewer. Initially done with Elixir but ported to JavaScript.</p>
+
+<h4 id="rex-game"><a href="https://github.com/raphaklaus/rex-game">Rex Game</a></h4>
+<p>Remake of Google’s Chrome offline game.</p>
+
+<h4 id="pokedex"><a href="https://github.com/raphaklaus/pokedex">Pokedex</a></h4>
+<p>Pokedex web interface using AngularJS, NodeJS and Docker to lift the whole structure.</p>
+
+<h4 id="pcm-to-web-audio"><a href="https://github.com/raphaklaus/pcm-2-webaudio">PCM to Web Audio</a></h4>
+<p>Convert PCM data like .wav to web audio format and play it.</p>
+
+<h4 id="game-boy-cpu-emulator"><a href="https://github.com/raphaklaus/gameboy-cpu">Game Boy CPU Emulator</a></h4>
+<p>Game Boy CPU emulator written in NodeJS</p>
+
+<h4 id="npm-for-fonts"><a href="https://github.com/raphaklaus/fontwr">NPM for Fonts</a></h4>
+<p>Font manager as CLI. All Google Fonts available allowing you to download, convert them into all web formats, and generate font-faces automatically. Written in NodeJS.</p>
+
+<h4 id="chupa-cabra"><a href="https://github.com/raphaklaus/chupa-cabra">Chupa Cabra</a></h4>
+<p>Command line to harvest paginated HTTP resources.</p>
+
+<h4 id="frequency-message-generator"><a href="http://raphaklaus.github.io/frequency-message-generator/">Frequency Message Generator</a></h4>
+<p>Write text messages and convert it to frequency alphabet.</p>
+
+<h4 id="matrix-css-effect"><a href="http://raphaklaus.github.io/matrix-fx/">Matrix CSS Effect</a></h4>
+<p>Digital rain matrix effect written in CSS3</p>
+:ET
