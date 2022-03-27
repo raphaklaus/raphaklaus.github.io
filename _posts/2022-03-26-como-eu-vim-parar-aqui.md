@@ -3,11 +3,11 @@ title: 'Como eu Vim parar aqui'
 article: true
 date: 2021-05-30 19:40:00
 tags: Vim productividade editor de código
-image: /assets/images/como-eu-vim-parar-aqui.png
+image: /assets/images/como-eu-vim-parar-aqui.jpg
 layout: post
 ---
 
-Nesse artigo vou compartilhar um pouco sobre minha jornada com o Vim.
+Nesse artigo vou compartilhar um pouco sobre minha jornada utilizando a ferramenta Vim para edição de código.
 
 <!--more-->
 
