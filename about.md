@@ -18,6 +18,6 @@ I enjoy functional programming and try to keep an eye in the Developer Experienc
 
 I am a huge advocate of **Feature Flags** as a mitigation/roll-out mechanism!
 
-Public key: 7C2C076F0336FD3CE6CF093CAA3CA15BF54D8736
+Public key: [7C2C076F0336FD3CE6CF093CAA3CA15BF54D8736](assets/misc/public.key)
 
 <a href="mailto:%72%61%70%68%61%6b%6c%61%75%73@%67%6d%61%69%6c.%63%6f%6d">You can reach me here</a> or <a href="https://www.linkedin.com/in/raphaelduartepinheiro/" target="_blank">here</a>.
