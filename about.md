@@ -7,7 +7,7 @@ I've been working as a Software Engineer for nearly **12 years** now and have ha
 to work with amazing people and very exciting projects. Developing solutions from the [Olympics](posts/como-um-bot-telegram-salvou-as-olimpiadas)
 to the [biggest ride hailing app solution in the Eastern Africa region](https://safeboda.com){:target="\_blank"}
 
-Right now I am working at [TIER](https://tier.app), world's leading solution for urban micromobility present in Europe, Middle East and USA. I'm part of the IoT team developing the backend services that integrates with the vehicle's hardware.
+Right now I am working at [TIER](https://tier.app), Europe's leading solution for urban micromobility present in Europe and Middle East. I'm part of the IoT team developing the backend services that integrates with the vehicle's hardware.
 
 During this journey I collaborated with over **20 nationalities!** 🌐
 
