@@ -3,13 +3,13 @@ layout: page
 title: About me
 ---
 
-I've been working as a Software Engineer for nearly **12 years** now and have had the opportunity
+I've been working as a Software Engineer for nearly **13 years** now and have had the opportunity
 to work with amazing people and very exciting projects. Developing solutions from the [Olympics](posts/como-um-bot-telegram-salvou-as-olimpiadas)
 to the [biggest ride hailing app solution in the Eastern Africa region](https://safeboda.com){:target="\_blank"}
 
-Right now I am working at [TIER](https://tier.app), Europe's leading solution for urban micromobility present in Europe and Middle East. I'm part of the IoT team developing the backend services that integrates with the vehicle's hardware.
+Right now I am working at [Dott](https://ridedott.com/), Europe's leading solution for urban micromobility present in Europe and Middle East. I'm part of the Ride Experience team that develops the customer facing application and its services. It's very exciting to ship stuff that impacts people directly!
 
-During this journey I collaborated with over **20 nationalities!** 🌐
+During this journey I collaborated with over **30 nationalities!** 🌐
 
 As far as technology goes, I've been developing using **NodeJS, Elixir, PostgreSQL, Redis, Kafka, Docker,
 Kubernetes** and some more in the recent years.
